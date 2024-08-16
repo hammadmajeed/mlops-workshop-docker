@@ -1,0 +1,17 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run:  docker build . --file Dockerfile --tag hammadmajeed/workshop-docker:1.0
+    - name: Upload the image
+      run: |    
+          docker login -u ${{SECRETS.DOCKER_USERNAME}} -p ${{SECRETS.DOCKER_PASSWORD}}
+          docker push hammadmajeed/workshop-docker:1.0
